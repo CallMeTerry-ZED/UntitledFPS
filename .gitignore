@@ -29,6 +29,7 @@ cmake_install.cmake
 *~
 .DS_Store
 .kateproject
+**.kate-swp
 
 # Debug files
 *.dSYM/
