@@ -11,6 +11,7 @@
 
 #include "Events/Event.h"
 #include "Core/Window/Window.h"
+#include "Core/Layer/LayerStack.h"
 #include <vector>
 #include <memory>
 
@@ -30,12 +31,19 @@ namespace FPS
         // Deferred event system
         void QueueEvent(std::unique_ptr<Event> event);
 
+        // Layer management
+        void PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); }
+        void PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); }
+        void PopLayer(Layer* layer) { m_LayerStack.PopLayer(layer); }
+        void PopOverlay(Layer* overlay) { m_LayerStack.PopOverlay(overlay); }
+
     private:
         void ProcessEvents();
 
         bool IsRunning;
         std::vector<std::unique_ptr<Event>> m_EventQueue;
         std::unique_ptr<Window> m_Window;
+        LayerStack m_LayerStack;
     };
 
     // Client Defined

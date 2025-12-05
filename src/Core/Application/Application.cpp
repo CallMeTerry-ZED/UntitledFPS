@@ -30,6 +30,15 @@ namespace FPS
 
     void Application::OnEvent(Event& event)
     {
+        // Dispatch to layers (overlays first, then regular layers)
+        // Overlays are at the end, so iterates in reverse
+        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+        {
+            (*--it)->OnEvent(event);
+            if (event.IsHandled())
+                break;
+        }
+
         // EventDispatcher for type-safe event handling
         EventDispatcher dispatcher(event);
 
@@ -74,6 +83,10 @@ namespace FPS
         {
             // Process deferred events always first
             ProcessEvents();
+
+            // Update all layers
+            for (Layer* layer : m_LayerStack)
+                layer->OnUpdate();
 
             m_Window->OnUpdate();
         }
