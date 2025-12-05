@@ -4,6 +4,8 @@ A small FPS game written in modern C++ and OpenGL.
 
 Feel free to join us on [Discord](https://discord.gg/NmQwqfsCD7).
 
+Heavily Inspired By the Chernos Hazel Engine project, [Hazel](https://github.com/TheCherno/Hazel).
+
 ## "From Scratch"
 
 Planned features such as:

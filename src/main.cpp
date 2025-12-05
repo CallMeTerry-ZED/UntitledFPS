@@ -2,16 +2,35 @@
  * Copyright (c) 2025 ZED Interactive. All Rights Reserved.
  */
 
+#include "Application/Application.h"
 #include "Logger/Logger.h"
 
-int main()
+class TestApp : public FPS::Application
 {
-    FPS::Logger logger; // automatically Init() in constructor
+public:
+    TestApp()
+    {
 
-    LOG_INFO("Application started");
-    LOG_DEBUG("Debug information: {}", 42);
-    LOG_WARN("This is a test warning");
+    }
 
-    // Automatically Shutdown() when 'logger' goes out of scope
+    ~TestApp()
+    {
+
+    }
+};
+
+FPS::Application* FPS::CreateApplication()
+{
+    return new TestApp();
+}
+
+int main(int argc, char** argv)
+{
+    FPS::Logger logger;
+
+    auto app = FPS::CreateApplication();
+    app->Run();
+    delete app;
+
     return 0;
 }
