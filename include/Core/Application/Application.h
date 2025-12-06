@@ -12,6 +12,8 @@
 #include "Core/Window/Window.h"
 #include "Core/Layer/LayerStack.h"
 #include "Core/ImGui/ImGuiLayer.h" 
+#include "Renderer/Shader/Shader.h"
+
 #include <vector>
 #include <memory>
 
@@ -42,13 +44,17 @@ namespace FPS
         void ProcessEvents();
 
         bool IsRunning;
-        std::vector<std::unique_ptr<Event>> m_EventQueue;
-        std::unique_ptr<Window> m_Window;
-        LayerStack m_LayerStack;
+
         static Application* s_Instance;
+        std::unique_ptr<Window> m_Window;
+
+        std::vector<std::unique_ptr<Event>> m_EventQueue;
+        
+        LayerStack m_LayerStack;
         ImGuiLayer* m_ImGuiLayer;
 
         unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+        std::unique_ptr<Shader> m_Shader;
     };
 
     // Client Defined
