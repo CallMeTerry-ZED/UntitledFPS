@@ -56,6 +56,8 @@ add_subdirectory(${PROJECT_ROOT}/thirdparty/glfw ${CMAKE_BINARY_DIR}/thirdparty/
 
 # glad
 add_subdirectory(${PROJECT_ROOT}/thirdparty/glad ${CMAKE_BINARY_DIR}/thirdparty/glad)
+# glm
+add_subdirectory(${PROJECT_ROOT}/thirdparty/glm ${CMAKE_BINARY_DIR}/thirdparty/glm)
 
 # imgui
 add_subdirectory(${PROJECT_ROOT}/thirdparty/imgui-docking ${CMAKE_BINARY_DIR}/thirdparty/imgui)
@@ -74,6 +76,7 @@ include_directories(
     ${PROJECT_ROOT}/thirdparty/spdlog/include
     ${PROJECT_ROOT}/thirdparty/glfw/include
     ${PROJECT_ROOT}/thirdparty/glad
+    ${PROJECT_ROOT}/thirdparty/glm/
     ${PROJECT_ROOT}/thirdparty/imgui-docking
     ${PROJECT_ROOT}/thirdparty/imgui-docking/backends
     ${PROJECT_ROOT}/thirdparty/imguizmo
@@ -106,6 +109,7 @@ target_link_libraries(${PROJECT_NAME}
         spdlog::spdlog
         glfw
         glad
+        glm
         imgui
         imguizmo
         imgui_node_editor
