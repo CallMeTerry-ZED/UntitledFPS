@@ -47,6 +47,8 @@ namespace FPS
         LayerStack m_LayerStack;
         static Application* s_Instance;
         ImGuiLayer* m_ImGuiLayer;
+
+        unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
     };
 
     // Client Defined
