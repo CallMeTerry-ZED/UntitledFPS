@@ -3,7 +3,7 @@
  */
 
 #include "Core/Engine.h"
-#include "Core/ImGui/ImGuiLayer.h"
+
 
 class ExampleLayer : public FPS::Layer
 {
@@ -14,12 +14,25 @@ public:
 
     void OnUpdate() override
     {
-         //LOG_TRACE("ExampleLayer::Update");
+        //LOG_TRACE("ExampleLayer::Update");
+
+        if (FPS::Input::IsKeyPressed(FPS_KEY_TAB))
+		LOG_TRACE("Tab key is pressed (poll)!");
     }
 
     void OnEvent(FPS::Event& event) override
     {
         //LOG_TRACE("{}", event.ToString());
+
+        if (event.GetEventType() == FPS::EventType::KeyPressed)
+		{
+			FPS::KeyPressedEvent& e = (FPS::KeyPressedEvent&)event;
+			if (e.GetKeyCode() == FPS_KEY_TAB)
+            {
+                LOG_TRACE("Tab key is pressed (event)!");
+            }
+			LOG_TRACE("{} - Key code: {}", event.ToString(), e.GetKeyCode());
+		}
     }
 };
 
