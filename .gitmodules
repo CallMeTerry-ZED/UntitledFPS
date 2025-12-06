@@ -1,3 +1,7 @@
 [submodule "thirdparty/yakuza"]
     path = thirdparty/yakuza
     url = https://github.com/CallMeTerry-ZED/Yakuza.git
+
+[submodule "thirdparty/infernoanim"]
+    path = thirdparty/infernoanim
+    url = https://github.com/CallMeTerry-ZED/InfernoAnim.git
