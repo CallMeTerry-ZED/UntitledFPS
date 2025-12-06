@@ -17,10 +17,13 @@ namespace FPS
 
         void OnAttach() override;
         void OnDetach() override;
-        void OnUpdate() override;
+        void OnImGuiRender() override; 
         void OnEvent(Event& event) override;
         void SetBlockEvents(bool block) { m_BlockEvents = block; }
         bool GetBlockEvents() const { return m_BlockEvents; }
+
+        void Begin();
+        void End(); 
 
     private:
         float m_Time = 0.0f;

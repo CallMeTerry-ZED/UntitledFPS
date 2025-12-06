@@ -11,6 +11,7 @@
 #include "Events/Event.h"
 #include "Core/Window/Window.h"
 #include "Core/Layer/LayerStack.h"
+#include "Core/ImGui/ImGuiLayer.h" 
 #include <vector>
 #include <memory>
 
@@ -45,6 +46,7 @@ namespace FPS
         std::unique_ptr<Window> m_Window;
         LayerStack m_LayerStack;
         static Application* s_Instance;
+        ImGuiLayer* m_ImGuiLayer;
     };
 
     // Client Defined

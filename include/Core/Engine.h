@@ -16,4 +16,7 @@
 #include "Core/Input/MouseButtonCodes.h"
 #include "Events/KeyEvent.h"
 
+// Thirdparty Includes
+#include <imgui.h>
+
 #endif

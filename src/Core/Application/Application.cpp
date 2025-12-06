@@ -31,6 +31,9 @@ namespace FPS
             this->QueueEvent(std::move(e));
         });
 
+        m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
+
         IsRunning = true;
     }
 
@@ -115,6 +118,13 @@ namespace FPS
             {
                 layer->OnUpdate();
             }
+
+            m_ImGuiLayer->Begin();
+            for (Layer* layer : m_LayerStack)
+            {
+                layer->OnImGuiRender();
+            }
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }

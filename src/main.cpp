@@ -3,6 +3,7 @@
  */
 
 #include "Core/Engine.h"
+#include "imgui.h"
 
 
 class ExampleLayer : public FPS::Layer
@@ -19,6 +20,17 @@ public:
         if (FPS::Input::IsKeyPressed(FPS_KEY_TAB))
 		LOG_TRACE("Tab key is pressed (poll)!");
     }
+
+    virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
+
+        ImGui::Begin("FPS ENGINE");
+        ImGui::Text("WELCOME TO FPS ENGINE!");
+        ImGui::End();
+	}
 
     void OnEvent(FPS::Event& event) override
     {
@@ -42,7 +54,6 @@ public:
     TestApp()
     {
         PushLayer(new ExampleLayer());
-        PushOverlay(new FPS::ImGuiLayer());
     }
 
     ~TestApp()
