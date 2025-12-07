@@ -2,7 +2,8 @@
  * Copyright (c) 2025 ZED Interactive. All Rights Reserved.
  */
 
- #pragma once
+#ifndef OPENGL_BUFFER_H
+#define OPENGL_BUFFER_H
 
 #include "Renderer/Buffer/Buffer.h"
 
@@ -39,3 +40,5 @@ namespace FPS
 		uint32_t m_Count;
 	};
 }
+
+#endif

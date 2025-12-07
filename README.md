@@ -1,6 +1,6 @@
 # UntitledFPS
 
-A small FPS game written in modern C++ and OpenGL.
+A FPS game/engine written in modern C++ and OpenGL.
 
 Feel free to join us on [Discord](https://discord.gg/NmQwqfsCD7).
 
@@ -10,10 +10,21 @@ Heavily Inspired By the Chernos Hazel Engine project, [Hazel](https://github.com
 
 Planned features such as:
 - Lua scripting
+- Bullet3 physics
+- Custom networking
+- Custom animations
+- 2.5D raycasting with planned full 3D rendering
+- Cross platfrom support
+- And much more
 
 ## Building
 
 This project uses a MakeFile wrapper around CMake for building.
+This project will only build and run on linux but we plan to support other platfroms such as:
+- MacOS
+- Windows
+- VR/AR
+- Consoles
 
 ### Build Commands
 
