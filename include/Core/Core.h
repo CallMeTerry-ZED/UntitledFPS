@@ -5,6 +5,8 @@
  #ifndef CORE_H
  #define CORE_H
 
+#include <memory>
+
 // Platform detection
 #ifdef _WIN32
     #define SANDBOX_PLATFORM_WINDOWS
@@ -37,5 +39,14 @@
     #define SANDBOX_ASSERT(x, ...)
     #define SANDBOX_CORE_ASSERT(x, ...)
 #endif
+
+namespace Sandbox
+{
+    template<typename T>
+    using Scope = std::unique_ptr<T>;
+
+    template<typename T>
+    using Ref = std::shared_ptr<T>;
+}
 
  #endif
