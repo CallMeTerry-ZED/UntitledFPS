@@ -9,13 +9,12 @@
 #define APPLICATION_H
 
 #include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
 #include "Core/Window/Window.h"
 #include "Core/Layer/LayerStack.h"
-#include "Core/ImGui/ImGuiLayer.h" 
-#include "Renderer/Shader/Shader.h"
-#include "Renderer/Buffer/Buffer.h"
-#include "Renderer/Buffer/VertexArray.h"
-#include "Renderer/Camera/OrthographicCamera.h"
+#include "Core/Time/Timestep.h"
+#include "Core/ImGui/ImGuiLayer.h"
+
 
 #include <vector>
 #include <memory>
@@ -56,13 +55,7 @@ namespace Sandbox
         LayerStack m_LayerStack;
         ImGuiLayer* m_ImGuiLayer;
 
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexArray> m_VertexArray;
-
-        std::shared_ptr<Shader> m_BlueShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-
-        OrthographicCamera m_Camera;
+        float m_LastFrameTime = 0.0f;
     };
 
     // Client Defined
