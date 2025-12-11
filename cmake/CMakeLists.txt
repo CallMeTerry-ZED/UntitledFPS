@@ -68,6 +68,9 @@ add_subdirectory(${PROJECT_ROOT}/thirdparty/imguizmo ${CMAKE_BINARY_DIR}/thirdpa
 # imgui-node-editor
 add_subdirectory(${PROJECT_ROOT}/thirdparty/imgui-node-editor ${CMAKE_BINARY_DIR}/thirdparty/imgui-node-editor)
 
+# stb
+add_subdirectory(${PROJECT_ROOT}/thirdparty/stb ${CMAKE_BINARY_DIR}/thirdparty/stb)
+
 # ===========================
 # Include directories
 # ===========================
@@ -81,6 +84,7 @@ include_directories(
     ${PROJECT_ROOT}/thirdparty/imgui-docking/backends
     ${PROJECT_ROOT}/thirdparty/imguizmo
     ${PROJECT_ROOT}/thirdparty/imgui-node-editor
+    ${PROJECT_ROOT}/thirdparty/stb
 )
 
 # ===========================
@@ -113,6 +117,7 @@ target_link_libraries(${PROJECT_NAME}
         imgui
         imguizmo
         imgui_node_editor
+        stb
 )
 
 # On Linux, you must also link against system OpenGL + pthread + dl + X11
@@ -158,10 +163,22 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     )
 endif()
 
+# ===========================
+# Copy assets to build dir
+# ===========================
+add_custom_target(copy_assets ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${PROJECT_ROOT}/assets
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets
+    COMMENT "Copying assets folder to output directory"
+)
+add_dependencies(${PROJECT_NAME} copy_assets)
+
 message(STATUS "")
 message(STATUS "========== Sandbox Engine Build Summary ==========")
 message(STATUS "C++ Standard:        ${CMAKE_CXX_STANDARD}")
 message(STATUS "Build Type:          ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install Prefix:      ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Assets Copied To:    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets")
 message(STATUS "================================================")
 message(STATUS "")

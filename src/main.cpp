@@ -3,6 +3,8 @@
  */
 
 #include "Core/Engine.h"
+#include "Renderer/Buffer/Buffer.h"
+#include "Renderer/Shader/Shader.h"
 
 class ExampleLayer : public Sandbox::Layer
 {
@@ -13,11 +15,11 @@ public:
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+			0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		std::shared_ptr<Sandbox::VertexBuffer> vertexBuffer;
+		Sandbox::Ref<Sandbox::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Sandbox::VertexBuffer::Create(vertices, sizeof(vertices)));
 		Sandbox::BufferLayout layout = {
 			{ Sandbox::ShaderDataType::Float3, "a_Position" },
@@ -27,28 +29,29 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<Sandbox::IndexBuffer> indexBuffer;
+		Sandbox::Ref<Sandbox::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Sandbox::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		m_SquareVA.reset(Sandbox::VertexArray::Create());
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		std::shared_ptr<Sandbox::VertexBuffer> squareVB;
+		Sandbox::Ref<Sandbox::VertexBuffer> squareVB;
 		squareVB.reset(Sandbox::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
-			{ Sandbox::ShaderDataType::Float3, "a_Position" }
+			{ Sandbox::ShaderDataType::Float3, "a_Position" },
+			{ Sandbox::ShaderDataType::Float2, "a_TexCoord" }
 		});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Sandbox::IndexBuffer> squareIB;
+		Sandbox::Ref<Sandbox::IndexBuffer> squareIB;
 		squareIB.reset(Sandbox::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -122,6 +125,46 @@ public:
 		)";
 
 		m_FlatColorShader.reset(Sandbox::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+			
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Sandbox::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Sandbox::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Sandbox::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Sandbox::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
     void OnUpdate(Sandbox::Timestep ts) override
@@ -165,7 +208,9 @@ public:
 				Sandbox::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
 		}
-		Sandbox::Renderer::Submit(m_Shader, m_VertexArray);
+
+		m_Texture->Bind();
+		Sandbox::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		Sandbox::Renderer::EndScene();
     }
@@ -187,11 +232,12 @@ public:
     }
 
 private:
-	std::shared_ptr<Sandbox::Shader> m_Shader;
-	std::shared_ptr<Sandbox::VertexArray> m_VertexArray;
+	Sandbox::Ref<Sandbox::Shader> m_Shader;
+	Sandbox::Ref<Sandbox::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Sandbox::Shader> m_FlatColorShader;
-	std::shared_ptr<Sandbox::VertexArray> m_SquareVA;
+	Sandbox::Ref<Sandbox::Shader> m_FlatColorShader, m_TextureShader;
+	Sandbox::Ref<Sandbox::VertexArray> m_SquareVA;
+    Sandbox::Ref<Sandbox::Texture2D> m_Texture;
 
 	Sandbox::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
